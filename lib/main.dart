@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_primera_app/pages/page2.dart';
 
-void main() => runApp(MiApp());
+void main() => runApp(const MiApp());
 
 class MiApp extends StatelessWidget {
   const MiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: "Mi App",
       home: Inicio(),
     );
@@ -25,14 +26,14 @@ class _MyHomePageState extends State<Inicio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: body(),
+      body: body(context),
     );
   }
 }
 
-Widget body() {
+Widget body(context) {
   return Container(
-    decoration: BoxDecoration(
+    decoration: const BoxDecoration(
       image: DecorationImage(
           image: NetworkImage(
               "https://w.forfun.com/fetch/62/62e3ce60fc426fe6f475764cd99779b9.jpeg"),
@@ -42,30 +43,30 @@ Widget body() {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        text_signin(),
-        user_field(),
-        user_password(),
-        SizedBox(
+        textSignin(),
+        usernameField(),
+        userPasswordField(),
+        const SizedBox(
           height: 15.0,
         ),
-        signIn_button()
+        signInButton(context)
       ],
     )),
   );
 }
 
-Widget text_signin() {
-  return Text(
+Widget textSignin() {
+  return const Text(
     "Sign In",
     style: TextStyle(
         color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold),
   );
 }
 
-Widget user_field() {
+Widget usernameField() {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-    child: TextField(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+    child: const TextField(
       decoration: InputDecoration(
         hintText: "Username",
         fillColor: Colors.white,
@@ -75,10 +76,10 @@ Widget user_field() {
   );
 }
 
-Widget user_password() {
+Widget userPasswordField() {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-    child: TextField(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+    child: const TextField(
       obscureText: true,
       decoration: InputDecoration(
         hintText: "Password",
@@ -89,15 +90,18 @@ Widget user_password() {
   );
 }
 
-Widget signIn_button() {
+Widget signInButton(context) {
   return TextButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.tealAccent.shade400),
         padding: MaterialStateProperty.all(
-            EdgeInsets.symmetric(horizontal: 25, vertical: 8)),
+            const EdgeInsets.symmetric(horizontal: 25, vertical: 8)),
       ),
-      onPressed: () {},
-      child: Text(
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const MainPage02()));
+      },
+      child: const Text(
         "Enter",
         style: TextStyle(color: Colors.black87, fontSize: 16.0),
       ));
