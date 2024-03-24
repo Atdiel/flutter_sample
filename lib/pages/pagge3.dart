@@ -20,7 +20,7 @@ class _Page03State extends State<Page03> {
 
 
   late Future<List<Gift>> _listadoGifts;
-  var url = Uri.https("https://api.giphy.com", "v2/emoji?api_key=jrYQNJkbGk3uPDWJnh0Z65Nr22cZW1gN&limit=4&offset=0");
+  var url = Uri.https("api.giphy.com", "/v2/emoji", {"api_key":"jrYQNJkbGk3uPDWJnh0Z65Nr22cZW1gN","limit":"10","offset":"0"});
 
   Future<List<Gift>> _getGifts() async {
     final response = await http.get(url);
@@ -34,7 +34,7 @@ class _Page03State extends State<Page03> {
 
       for (var element in jsonBody["data"]) {
         gifts.add(
-          Gift(element["title"], element["image"]["downsized"]["url"])
+          Gift(element["title"], element["images"]["downsized"]["url"])
         );
       }
 
@@ -57,24 +57,20 @@ class _Page03State extends State<Page03> {
       appBar: AppBar(
         title: const Text("Page 3"),
       ),
-      body: ListView.builder(
-          itemCount: _personas.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onLongPress: () {
-                _borrarPersona(context, _personas[index]);
-              },
-              title: Text(_personas[index].nombre),
-              subtitle: Text(
-                  _personas[index].direccion + ' ' + _personas[index].telefono),
-              leading: CircleAvatar(
-                backgroundColor: Colors.yellow.shade400,
-                foregroundColor: Colors.deepPurpleAccent,
-                child: Text(_personas[index].nombre.substring(0, 1)),
-              ),
-              trailing: Icon(Icons.arrow_forward_ios),
+      body: FutureBuilder(future: _listadoGifts, builder: (context, snapshot) {
+            if(snapshot.hasData) {
+              return ListView(
+                children: _listGifts(snapshot.data),
+              );
+            } else if(snapshot.hasError) {
+              return Text("Error");
+            }
+
+
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          }),
+          })
     );
   }
 
@@ -102,6 +98,29 @@ class _Page03State extends State<Page03> {
         });
   }
 }
+
+
+List<Widget> _listGifts(List<Gift>? data) {
+  List<Widget> gifts = [];
+  if(data == null) {
+    return gifts;
+  }
+  for ( var gif in data) {
+    gifts.add(Card(child: Column(
+      children: [
+        Image.network(gif.url),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(gif.nombre),
+        ),
+      ],
+    )));
+  }
+
+  return gifts;
+}
+
+
 
 class Persona {
   String nombre;
