@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_primera_app/models/gift.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,9 +19,12 @@ class _Page03State extends State<Page03> {
     Persona("Camila", "Av. Crisol", "123-0909-454")
   ];
 
-
   late Future<List<Gift>> _listadoGifts;
-  var url = Uri.https("api.giphy.com", "/v2/emoji", {"api_key":"jrYQNJkbGk3uPDWJnh0Z65Nr22cZW1gN","limit":"10","offset":"0"});
+  var url = Uri.https("api.giphy.com", "/v2/emoji", {
+    "api_key": "jrYQNJkbGk3uPDWJnh0Z65Nr22cZW1gN",
+    "limit": "10",
+    "offset": "0"
+  });
 
   Future<List<Gift>> _getGifts() async {
     final response = await http.get(url);
@@ -33,11 +37,9 @@ class _Page03State extends State<Page03> {
       final jsonBody = jsonDecode(body);
 
       for (var element in jsonBody["data"]) {
-        gifts.add(
-          Gift(element["title"], element["images"]["downsized"]["url"])
-        );
+        gifts
+            .add(Gift(element["title"], element["images"]["downsized"]["url"]));
       }
-
     } else {
       throw Exception("Error en la API");
     }
@@ -54,24 +56,25 @@ class _Page03State extends State<Page03> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Page 3"),
-      ),
-      body: FutureBuilder(future: _listadoGifts, builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return ListView(
-                children: _listGifts(snapshot.data),
+        appBar: AppBar(
+          title: const Text("Page 3"),
+        ),
+        body: FutureBuilder(
+            future: _listadoGifts,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return GridView.count(
+                  crossAxisCount: 2,
+                  children: _listGifts(snapshot.data),
+                );
+              } else if (snapshot.hasError) {
+                return Text("Error");
+              }
+
+              return Center(
+                child: CircularProgressIndicator(),
               );
-            } else if(snapshot.hasError) {
-              return Text("Error");
-            }
-
-
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          })
-    );
+            }));
   }
 
   _borrarPersona(context, Persona persona) {
@@ -99,19 +102,20 @@ class _Page03State extends State<Page03> {
   }
 }
 
-
 List<Widget> _listGifts(List<Gift>? data) {
   List<Widget> gifts = [];
-  if(data == null) {
+  if (data == null) {
     return gifts;
   }
-  for ( var gif in data) {
-    gifts.add(Card(child: Column(
+  for (var gif in data) {
+    gifts.add(Card(
+        child: Column(
       children: [
-        Image.network(gif.url),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(gif.nombre),
+        Expanded(
+          child: Image.network(
+            gif.url,
+            fit: BoxFit.fill,
+          ),
         ),
       ],
     )));
@@ -119,8 +123,6 @@ List<Widget> _listGifts(List<Gift>? data) {
 
   return gifts;
 }
-
-
 
 class Persona {
   String nombre;

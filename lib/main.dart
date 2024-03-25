@@ -9,6 +9,7 @@ class MiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Mi App",
       home: Inicio(),
     );
@@ -98,8 +99,8 @@ Widget signInButton(context) {
             const EdgeInsets.symmetric(horizontal: 25, vertical: 8)),
       ),
       onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const MainPage02()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MainPage02()));
       },
       child: const Text(
         "Enter",

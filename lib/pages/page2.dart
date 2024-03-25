@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_primera_app/pages/navigationBar.dart';
 import 'package:flutter_primera_app/pages/pagge3.dart';
 
 class MainPage02 extends StatefulWidget {
@@ -45,7 +46,13 @@ class Page02 extends State {
                       MaterialPageRoute(
                           builder: ((context) => const Page03())));
                 },
-                child: Text("Navegar a la sig."))
+                child: Text("Navegar a la sig.")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => NavBar())));
+                },
+                child: Text("NavBar"))
           ],
         ),
       ),
